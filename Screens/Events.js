@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react';
 import * as SQLite from 'expo-sqlite';
-import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native'; 
+import { Text, View, StyleSheet, FlatList, TouchableOpacity,Alert } from 'react-native'; 
 const db = SQLite.openDatabase('EventsDatabase.db'); 
 export default function Event() {
   const [events,setEvents]=useState([]);
@@ -31,16 +31,32 @@ useEffect(()=>{
     );
   };
 
-  const deleteEvent=(id)=>{
-       db.transaction(tx=>{
-        tx.executeSql('DELETE FROM events WHERE id=?',[id],
-        (txObj,resultSet)=>{
-          if(resultSet.rowsAffected>0){
-            console.log('Event deleted successfully');
-          }
-        }
-        )
-       })
+  const DeleteUpdate=(id)=>{
+    Alert.alert(
+      'Hello, Do you want to update selected Event or to delete it?',
+      '',
+      [
+        { text: 'Delete', onPress: () =>{
+          db.transaction(tx=>{
+            tx.executeSql('DELETE FROM events WHERE id=?',[id],
+            (txObj,resultSet)=>{
+              if(resultSet.rowsAffected>0){
+                console.log('Event deleted successfully');
+              }
+            }
+            )
+           })
+        } },
+        {
+          text: 'Update',
+          onPress: () => console.log('No Pressed'),
+          style: 'cancel',
+        },
+      ],
+      { cancelable: true }
+      //clicking out side of alert will not cancel
+    );
+       
   }
 
   const listItemView = (item) => {
@@ -49,7 +65,7 @@ useEffect(()=>{
         key={item.id}
         ItemSeparatorComponent={listViewItemSeparator}
         style={{ backgroundColor: 'white', padding: 20, margin:2, borderRadius:5, width:'100%' }}>
-        <TouchableOpacity onPress={()=>deleteEvent(item.id)}>
+        <TouchableOpacity onPress={()=>DeleteUpdate(item.id)}>
         <Text style={{fontWeight:'bold',fontSize:24}}>{item.name}</Text>
         <Text style={{fontSize:18}}>Due date:{item.date}</Text>
         </TouchableOpacity>
