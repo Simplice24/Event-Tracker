@@ -2,8 +2,12 @@ import {useState,useEffect} from 'react';
 import * as SQLite from 'expo-sqlite';
 import { Text, View, StyleSheet, FlatList, TouchableOpacity,Alert } from 'react-native'; 
 const db = SQLite.openDatabase('EventsDatabase.db'); 
-export default function Event() {
+export default function Event({navigation}) {
   const [events,setEvents]=useState([]);
+
+  const [idupdated,setID]=useState('');
+  const [nameupdated,setName]=useState('');
+  const [dateupdated,setDate]=useState('');
 
   const getEvents = () =>{
     db.transaction(tx => {
@@ -30,8 +34,9 @@ useEffect(()=>{
       />
     );
   };
+  
 
-  const DeleteUpdate=(id)=>{
+  const DeleteUpdate=(id,name,date)=>{
     Alert.alert(
       'Hello, Do you want to update selected Event or to delete it?',
       '',
@@ -49,8 +54,7 @@ useEffect(()=>{
         } },
         {
           text: 'Update',
-          onPress: () => console.log('No Pressed'),
-          style: 'cancel',
+          onPress:() =>{navigation.navigate('Update',{id,name,date})}
         },
       ],
       { cancelable: true }
@@ -58,6 +62,10 @@ useEffect(()=>{
     );
        
   }
+  const UpdateEvent=()=>{
+    navigation.navigate('Update',{});
+  }
+
 
   const listItemView = (item) => {
     return (
@@ -65,7 +73,7 @@ useEffect(()=>{
         key={item.id}
         ItemSeparatorComponent={listViewItemSeparator}
         style={{ backgroundColor: 'white', padding: 20, margin:2, borderRadius:5, width:'100%' }}>
-        <TouchableOpacity onPress={()=>DeleteUpdate(item.id)}>
+        <TouchableOpacity onPress={()=>DeleteUpdate(item.id,item.name,item.date)}>
         <Text style={{fontWeight:'bold',fontSize:24}}>{item.name}</Text>
         <Text style={{fontSize:18}}>Due date:{item.date}</Text>
         </TouchableOpacity>
@@ -100,5 +108,32 @@ const styles = StyleSheet.create({
   logo: {
     height: 128,
     width: 128,
+  },
+  datecards:{
+      marginBottom:5,
+      height:150,
+      width:'100%',
+      borderRadius:20
+  },
+  datePickerStyle: {
+    width: 200,
+    marginTop: 10,
+  },
+  input:{
+    height:50,
+    marginTop:20,
+    color:'black',
+    width:'97%',
+    marginLeft:5,
+    marginBottom:5,
+  },
+  Addbutton:{
+    height:50,
+    width:'15%',
+    color:'white',
+    backgroundColor:'#0d3b66',
+    borderRadius:60,
+    marginLeft:'70%',
+    marginTop:-42,
   }
 });

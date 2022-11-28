@@ -3,6 +3,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { NavigationContainer } from '@react-navigation/native';
 import {card} from 'react-native-paper';
 import Home from './Screens/Home';
+import Update from './Screens/Update';
 import Notifications from './Screens/Notifications';
 import Archives from './Screens/Archives';
 import Events from './Screens/Events';
@@ -61,6 +62,11 @@ function MyTabs(navigation) {
           ),
           tabBarBadge:20
         }}
+      />
+
+<Tab.Screen
+        name="Update"
+        component={Update}
       />
     </Tab.Navigator>
     </NavigationContainer>

@@ -61,7 +61,7 @@ export default function AssetExample() {
       <Card style={styles.cardOuter}>
         <Text style={{textAlign:'center', fontWeight:'bold',fontSize:16,padding:2}}>Overview</Text>
       <Card style={styles.card}>
-           <Text style={styles.over}>Active Events</Text>
+           <Text style={styles.over }>Active Events</Text>
         </Card>
         <Card style={styles.card}>
            <Text style={styles.over}>Notifications</Text>
